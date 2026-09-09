@@ -29,6 +29,7 @@ export const SecurityView: React.FC = () => {
     activityLogs, 
     terminateSession, 
     updateUser, 
+    updateUserPassword,
     addToast,
     theme,
     setTheme
@@ -110,19 +111,26 @@ export const SecurityView: React.FC = () => {
       });
       return;
     }
+    if (newPassword.length < 6) {
+      addToast({
+        type: 'error',
+        title: 'Weak Password',
+        message: 'Firebase passwords must contain at least 6 characters.',
+      });
+      return;
+    }
 
     setPassLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setPassLoading(false);
-    setCurrPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-
-    addToast({
-      type: 'success',
-      title: 'Password Updated',
-      message: 'Your account credentials were changed successfully.',
-    });
+    try {
+      const res = await updateUserPassword(newPassword);
+      if (res.success) {
+        setCurrPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      }
+    } finally {
+      setPassLoading(false);
+    }
   };
 
   return (

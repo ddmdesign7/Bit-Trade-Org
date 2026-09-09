@@ -5,10 +5,11 @@ import { Eye, EyeOff, Lock, Mail, User as UserIcon, ArrowRight, ShieldCheck, Che
 
 interface AuthCardProps {
   initialMode?: 'login' | 'register' | 'forgot-password';
+  onSuccess?: () => void;
 }
 
-export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login' }) => {
-  const { login, register, setCurrentPage, addToast } = useTrading();
+export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuccess }) => {
+  const { login, register, loginWithGoogle, sendPasswordReset, setCurrentPage, addToast } = useTrading();
   const [mode, setMode] = useState<'login' | 'register' | 'forgot-password'>(initialMode);
   
   // Form fields
@@ -38,8 +39,10 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login' }) => 
           setIsLoading(false);
           return;
         }
-        await new Promise((r) => setTimeout(r, 600)); // realistic smooth auth feedback
-        await login(email, password);
+        const success = await login(email, password);
+        if (success) {
+          onSuccess?.();
+        }
       } else if (mode === 'register') {
         if (!name.trim() || !email.trim() || !password.trim()) {
           addToast({
@@ -59,6 +62,15 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login' }) => 
           setIsLoading(false);
           return;
         }
+        if (password.length < 6) {
+          addToast({
+            type: 'error',
+            title: 'Password Too Short',
+            message: 'Firebase Authentication requires passwords to be at least 6 characters.',
+          });
+          setIsLoading(false);
+          return;
+        }
         if (!agreeTerms) {
           addToast({
             type: 'warning',
@@ -68,8 +80,10 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login' }) => 
           setIsLoading(false);
           return;
         }
-        await new Promise((r) => setTimeout(r, 600));
-        await register(name, email, password);
+        const success = await register(name, email, password);
+        if (success) {
+          onSuccess?.();
+        }
       } else if (mode === 'forgot-password') {
         if (!email.trim() || !email.includes('@')) {
           addToast({
@@ -80,13 +94,10 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login' }) => 
           setIsLoading(false);
           return;
         }
-        await new Promise((r) => setTimeout(r, 700));
-        setForgotSent(true);
-        addToast({
-          type: 'success',
-          title: 'Reset Link Sent',
-          message: `Instructions to reset your credentials were sent to ${email}.`,
-        });
+        const res = await sendPasswordReset(email);
+        if (res.success) {
+          setForgotSent(true);
+        }
       }
     } finally {
       setIsLoading(false);
@@ -115,9 +126,14 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login' }) => 
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    await login('google.user@bittrade.net');
-    setIsLoading(false);
+    try {
+      const res = await loginWithGoogle();
+      if (res.success) {
+        onSuccess?.();
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -18,9 +18,24 @@ import {
   INITIAL_SESSIONS, 
   INITIAL_LOGS 
 } from '../data/mockData';
+import { 
+  auth, 
+  googleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  sendPasswordResetEmail,
+  updateProfile,
+  updatePassword,
+  onAuthStateChanged,
+  formatAuthError,
+  FirebaseUser
+} from '../lib/firebase';
 
 interface TradingContextType {
   user: User | null;
+  authLoading: boolean;
   currentPage: NavPage;
   setCurrentPage: (page: NavPage) => void;
   assets: CryptoAsset[];
@@ -54,6 +69,9 @@ interface TradingContextType {
   showInvestmentNotice: (amount?: number, address?: string) => void;
   login: (email: string, password?: string) => Promise<boolean>;
   register: (name: string, email: string, password?: string) => Promise<boolean>;
+  loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
+  sendPasswordReset: (email: string) => Promise<{ success: boolean; error?: string }>;
+  updateUserPassword: (newPassword: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   terminateSession: (sessionId: string) => void;
   updateUser: (updates: Partial<User>) => void;
@@ -67,7 +85,8 @@ interface TradingContextType {
 const TradingContext = createContext<TradingContextType | undefined>(undefined);
 
 export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(INITIAL_USER);
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<NavPage>('dashboard');
   const [theme, setThemeState] = useState<AppTheme>(() => {
     try {
@@ -78,6 +97,37 @@ export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
     return 'dim';
   });
+
+  const mapFirebaseUser = (firebaseUser: FirebaseUser): User => {
+    return {
+      id: firebaseUser.uid,
+      name: firebaseUser.displayName || (firebaseUser.email ? firebaseUser.email.split('@')[0] : 'Joshua James Bergin'),
+      email: firebaseUser.email || 'trader@bittrade.net',
+      kycTier: 'Tier 2 Verified',
+      twoFactorEnabled: false,
+      securityAlertsEnabled: true,
+      loginAlertsEnabled: true,
+      avatarUrl: firebaseUser.photoURL || undefined,
+      joinedDate: firebaseUser.metadata?.creationTime
+        ? new Date(firebaseUser.metadata.creationTime).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+        : 'March 2024',
+    };
+  };
+
+  // Sync Firebase Auth state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(mapFirebaseUser(firebaseUser));
+        setCurrentPage((prev) => (['login', 'register', 'forgot-password'].includes(prev) ? 'dashboard' : prev));
+      } else {
+        setUser(null);
+      }
+      setAuthLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Synchronize theme class on HTML document root for universal styling
   useEffect(() => {
@@ -447,47 +497,165 @@ export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children })
     return false;
   };
 
-  // Authentication
-  const login = async (email: string): Promise<boolean> => {
-    setUser({
-      ...INITIAL_USER,
-      name: 'Joshua James Bergin',
-      email: email && email.includes('@') ? email : 'Berginjoshua1@gmail.com',
-      joinedDate: 'March 2019',
-    });
-    setCurrentPage('dashboard');
-    addToast({
-      type: 'success',
-      title: 'Welcome Back, Joshua James Bergin',
-      message: 'Signed in as Berginjoshua1@gmail.com. Session encrypted.',
-    });
-    return true;
+  // Authentication via Firebase Auth
+  const login = async (email: string, password?: string): Promise<boolean> => {
+    try {
+      if (!password) {
+        addToast({
+          type: 'error',
+          title: 'Password Required',
+          message: 'Please enter your password to sign in.',
+        });
+        return false;
+      }
+      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
+      const appUser = mapFirebaseUser(userCredential.user);
+      setUser(appUser);
+      setCurrentPage('dashboard');
+      addToast({
+        type: 'success',
+        title: `Welcome Back, ${appUser.name}`,
+        message: `Signed in as ${appUser.email}. Authenticated with Firebase.`,
+      });
+      return true;
+    } catch (error: unknown) {
+      const message = formatAuthError(error);
+      addToast({
+        type: 'error',
+        title: 'Authentication Failed',
+        message,
+        duration: 6500,
+      });
+      return false;
+    }
   };
 
-  const register = async (name: string, email: string): Promise<boolean> => {
-    setUser({
-      ...INITIAL_USER,
-      id: `usr_${Date.now()}`,
-      name: name || 'Demo Trader',
-      email: email || 'trader@bittrade.net',
-    });
-    setCurrentPage('dashboard');
-    addToast({
-      type: 'success',
-      title: 'Account Created Successfully',
-      message: 'Welcome to Bit Trade Net! Your demo trading sandbox is ready.',
-    });
-    return true;
+  const register = async (name: string, email: string, password?: string): Promise<boolean> => {
+    try {
+      if (!password) {
+        addToast({
+          type: 'error',
+          title: 'Password Required',
+          message: 'Please provide a password for registration.',
+        });
+        return false;
+      }
+      const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+      if (name.trim()) {
+        try {
+          await updateProfile(userCredential.user, { displayName: name.trim() });
+        } catch (err) {
+          console.warn('Could not set displayName during register:', err);
+        }
+      }
+      const appUser: User = {
+        ...mapFirebaseUser(userCredential.user),
+        name: name.trim() || userCredential.user.displayName || 'Trader',
+      };
+      setUser(appUser);
+      setCurrentPage('dashboard');
+      addToast({
+        type: 'success',
+        title: 'Account Created with Firebase',
+        message: `Welcome to Bit Trade Net, ${appUser.name}! Your Firebase account is now active.`,
+      });
+      return true;
+    } catch (error: unknown) {
+      const message = formatAuthError(error);
+      addToast({
+        type: 'error',
+        title: 'Registration Failed',
+        message,
+        duration: 6500,
+      });
+      return false;
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    setCurrentPage('login');
-    addToast({
-      type: 'info',
-      title: 'Logged Out',
-      message: 'You have been securely signed out of Bit Trade Net.',
-    });
+  const loginWithGoogle = async (): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const userCredential = await signInWithPopup(auth, googleAuthProvider);
+      const appUser = mapFirebaseUser(userCredential.user);
+      setUser(appUser);
+      setCurrentPage('dashboard');
+      addToast({
+        type: 'success',
+        title: `Welcome, ${appUser.name}`,
+        message: `Signed in via Google Authentication as ${appUser.email}.`,
+      });
+      return { success: true };
+    } catch (error: unknown) {
+      const message = formatAuthError(error);
+      addToast({
+        type: 'error',
+        title: 'Google Sign-In Failed',
+        message,
+        duration: 6500,
+      });
+      return { success: false, error: message };
+    }
+  };
+
+  const sendPasswordReset = async (email: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+      addToast({
+        type: 'success',
+        title: 'Password Reset Email Sent',
+        message: `Firebase has dispatched recovery instructions to ${email.trim()}.`,
+        duration: 7000,
+      });
+      return { success: true };
+    } catch (error: unknown) {
+      const message = formatAuthError(error);
+      addToast({
+        type: 'error',
+        title: 'Reset Request Failed',
+        message,
+        duration: 6500,
+      });
+      return { success: false, error: message };
+    }
+  };
+
+  const updateUserPassword = async (newPassword: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      if (!auth.currentUser) {
+        throw new Error('No authenticated user session found.');
+      }
+      await updatePassword(auth.currentUser, newPassword);
+      addToast({
+        type: 'success',
+        title: 'Password Updated',
+        message: 'Your Firebase account password was successfully updated.',
+      });
+      return { success: true };
+    } catch (error: unknown) {
+      const message = formatAuthError(error);
+      addToast({
+        type: 'error',
+        title: 'Password Update Failed',
+        message,
+        duration: 6500,
+      });
+      return { success: false, error: message };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error('Sign out error:', err);
+    } finally {
+      setUser(null);
+      setCurrentPage('login');
+      addToast({
+        type: 'info',
+        title: 'Logged Out',
+        message: 'You have been securely signed out of Firebase Authentication.',
+      });
+    }
   };
 
   const terminateSession = (sessionId: string) => {
@@ -499,7 +667,14 @@ export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   };
 
-  const updateUser = (updates: Partial<User>) => {
+  const updateUser = async (updates: Partial<User>) => {
+    if (updates.name && auth.currentUser) {
+      try {
+        await updateProfile(auth.currentUser, { displayName: updates.name });
+      } catch (err) {
+        console.warn('Could not update Firebase displayName:', err);
+      }
+    }
     setUser((prev) => (prev ? { ...prev, ...updates } : null));
     addToast({
       type: 'success',
@@ -524,6 +699,7 @@ export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children })
     <TradingContext.Provider
       value={{
         user,
+        authLoading,
         currentPage,
         setCurrentPage,
         theme,
@@ -553,6 +729,9 @@ export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children })
         showInvestmentNotice,
         login,
         register,
+        loginWithGoogle,
+        sendPasswordReset,
+        updateUserPassword,
         logout,
         terminateSession,
         updateUser,

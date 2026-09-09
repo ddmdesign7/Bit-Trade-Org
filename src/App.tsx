@@ -15,8 +15,25 @@ import { DepositModal } from './components/wallet/DepositModal';
 import { ToastContainer } from './components/ui/Toast';
 
 const MainAppContent: React.FC = () => {
-  const { user, currentPage, setCurrentPage, toasts, removeToast, theme } = useTrading();
+  const { user, currentPage, setCurrentPage, toasts, removeToast, theme, authLoading } = useTrading();
   const [depositModalOpen, setDepositModalOpen] = useState(false);
+
+  // While Firebase initializes auth state
+  if (authLoading) {
+    return (
+      <div className={`min-h-screen ${theme === 'true-black' ? 'bg-black' : 'bg-[#060a12]'} text-slate-100 flex flex-col justify-center items-center trading-pattern`}>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center font-black text-slate-950 text-lg shadow-lg shadow-emerald-500/20 animate-pulse">
+            B
+          </div>
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono">Connecting to Firebase Auth...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // If user is not authenticated or explicitly on auth views, show AuthCard
   const isAuthPage = ['login', 'register', 'forgot-password'].includes(currentPage);
