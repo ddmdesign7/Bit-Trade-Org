@@ -1,0 +1,8 @@
+{
+  "name": "Bit Trade Org",
+  "description": "Modern, professional digital trading and cryptocurrency financial technology platform. Trade Smarter. Move Faster.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

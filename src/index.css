@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #060a12;
+    color: #e2e8f0;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Ensure inputs don't trigger iOS Safari auto-zoom */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  @media (min-width: 640px) {
+    input, select, textarea {
+      font-size: inherit;
+    }
+  }
+}
+
+/* Safe area padding utilities for mobile notches & home indicator */
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-area-pb {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.6);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+/* Background trading grid pattern */
+.bg-trading-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(11, 18, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-panel-hover {
+  transition: all 0.2s ease-in-out;
+}
+.glass-panel-hover:hover {
+  background: rgba(15, 24, 43, 0.85);
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.glass-input {
+  background: rgba(13, 22, 38, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+.glass-input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  outline: none;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 4s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   THEME STYLING: Dim (Default Midnight) vs True Black (OLED)
+   ========================================================================== */
+
+/* True Black OLED Theme Overrides */
+html.theme-true-black,
+html.theme-true-black body,
+.theme-true-black {
+  background-color: #000000 !important;
+  color: #f1f5f9;
+}
+
+html.theme-true-black body {
+  background-color: #000000 !important;
+}
+
+/* Background grid in OLED True Black */
+html.theme-true-black .bg-trading-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+}
+
+/* Glass panels in OLED True Black */
+html.theme-true-black .glass-panel {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+}
+
+html.theme-true-black .glass-panel-hover:hover {
+  background: #09090b !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+html.theme-true-black .glass-input {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
+html.theme-true-black .glass-input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Header, MobileNav, Footer, Tooltips in OLED True Black */
+html.theme-true-black header {
+  background-color: rgba(0, 0, 0, 0.96) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.theme-true-black nav {
+  background-color: rgba(0, 0, 0, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.theme-true-black footer {
+  background-color: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hardcoded hex backgrounds converted to pure black on OLED */
+html.theme-true-black .bg-\[\#060a12\],
+html.theme-true-black .bg-\[\#070b14\],
+html.theme-true-black .bg-\[\#0b1220\],
+html.theme-true-black .bg-\[\#04070d\],
+html.theme-true-black .bg-\[\#070d18\] {
+  background-color: #000000 !important;
+}
+
+html.theme-true-black .bg-\[\#060a12\]\/95,
+html.theme-true-black .bg-\[\#070b14\]\/95,
+html.theme-true-black .bg-\[\#070b14\]\/98 {
+  background-color: rgba(0, 0, 0, 0.97) !important;
+}
+
+/* Dark inner elements in OLED mode */
+html.theme-true-black .bg-slate-900,
+html.theme-true-black .bg-slate-900\/90,
+html.theme-true-black .bg-slate-900\/80,
+html.theme-true-black .bg-slate-900\/60,
+html.theme-true-black .bg-slate-950 {
+  background-color: #050505 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.theme-true-black .bg-slate-800,
+html.theme-true-black .bg-slate-800\/80,
+html.theme-true-black .bg-slate-800\/70,
+html.theme-true-black .bg-slate-800\/60,
+html.theme-true-black .bg-slate-800\/50,
+html.theme-true-black .bg-slate-800\/40,
+html.theme-true-black .bg-slate-800\/30 {
+  background-color: #101012 !important;
+}
+
+html.theme-true-black .border-slate-800,
+html.theme-true-black .border-slate-800\/90,
+html.theme-true-black .border-slate-800\/80,
+html.theme-true-black .border-slate-800\/60,
+html.theme-true-black .border-slate-700,
+html.theme-true-black .border-slate-700\/80,
+html.theme-true-black .border-slate-700\/70,
+html.theme-true-black .border-slate-700\/60 {
+  border-color: #202024 !important;
+}
+
+html.theme-true-black ::-webkit-scrollbar-track {
+  background: #000000 !important;
+}
+
+html.theme-true-black ::-webkit-scrollbar-thumb {
+  background: #27272a !important;
+}
+
