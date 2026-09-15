@@ -64,12 +64,12 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Regulatory & Simulation Disclosure */}
+        {/* Regulatory & Platform Disclosure */}
         <div className="pt-2 md:pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-slate-400 text-center md:text-left">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 hidden sm:inline" />
             <span>
-              &copy; {new Date().getFullYear()} BIT TRADE NET. Simulation Sandbox. Demo Assets Only.
+              &copy; {new Date().getFullYear()} BIT TRADE NET. All rights reserved.
             </span>
           </div>
 

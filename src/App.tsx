@@ -70,7 +70,7 @@ const MainAppContent: React.FC = () => {
         </main>
 
         <footer className="py-4 sm:py-6 text-center text-xs text-slate-400 border-t border-slate-900 safe-area-pb px-3">
-          &copy; {new Date().getFullYear()} Bit Trade Net. Trade Smarter. Move Faster. Institutional simulation environment.
+          &copy; {new Date().getFullYear()} Bit Trade Net. Trade Smarter. Move Faster. All rights reserved.
         </footer>
         <ToastContainer toasts={toasts} onDismiss={removeToast} />
       </div>

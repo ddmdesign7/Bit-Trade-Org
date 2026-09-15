@@ -69,6 +69,17 @@
   background: rgba(16, 185, 129, 0.4);
 }
 
+/* Hide scrollbar utility */
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none,
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Background trading grid pattern */
 .bg-trading-grid {
   background-size: 32px 32px;

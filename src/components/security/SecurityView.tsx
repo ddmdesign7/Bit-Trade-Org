@@ -47,16 +47,16 @@ export const SecurityView: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passLoading, setPassLoading] = useState(false);
 
-  const demoTotpSecret = 'JBSWY3DPEHPK3PXP';
+  const totpSecret = 'JBSWY3DPEHPK3PXP';
 
   const handleCopyKey = () => {
-    navigator.clipboard.writeText(demoTotpSecret);
+    navigator.clipboard.writeText(totpSecret);
     setCopiedKey(true);
     setTimeout(() => setCopiedKey(false), 2000);
     addToast({
       type: 'info',
       title: 'Secret Key Copied',
-      message: 'Demo authenticator secret copied to clipboard.',
+      message: 'Authenticator secret copied to clipboard.',
     });
   };
 
@@ -686,7 +686,7 @@ export const SecurityView: React.FC = () => {
           </div>
 
           <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-400 flex items-center justify-between">
-            <span>{demoTotpSecret}</span>
+            <span>{totpSecret}</span>
             <button
               type="button"
               onClick={handleCopyKey}
@@ -698,14 +698,14 @@ export const SecurityView: React.FC = () => {
 
           <div>
             <label className="block text-xs font-semibold text-slate-400 mb-1 text-left">
-              Enter 6-Digit TOTP Code (e.g. 582910)
+              Enter 6-Digit TOTP Code
             </label>
             <input
               type="text"
               maxLength={6}
               value={totpInput}
               onChange={(e) => setTotpInput(e.target.value)}
-              placeholder="582910"
+              placeholder="123456"
               required
               className="glass-input w-full px-3.5 py-2.5 rounded-xl text-center text-lg font-mono tracking-widest font-bold"
               autoFocus

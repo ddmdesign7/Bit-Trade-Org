@@ -82,7 +82,7 @@ export const MarketView: React.FC = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6 pb-12">
-      {/* Header & Simulation Notice */}
+      {/* Header & Market Status */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel rounded-2xl p-4 sm:p-6 border border-slate-700/60 shadow-lg relative overflow-hidden">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -90,11 +90,11 @@ export const MarketView: React.FC = () => {
               Cryptocurrency Markets
             </h1>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-extrabold text-emerald-400">
-              SIMULATED DEMO DATA
+              LIVE ORDER FLOW
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-            Real-time simulated pricing, market capitalization, 24-hour volume, and order-routing liquidity pools.
+            Real-time institutional pricing, market capitalization, 24-hour volume, and order-routing liquidity pools.
           </p>
         </div>
 

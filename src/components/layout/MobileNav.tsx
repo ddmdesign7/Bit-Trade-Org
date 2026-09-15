@@ -34,7 +34,7 @@ export const MobileNav: React.FC = () => {
               key={item.id}
               id={`mobile-tab-${item.id}`}
               onClick={() => setCurrentPage(item.id)}
-              className={`flex-1 min-w-[56px] min-h-[48px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all active:scale-95 cursor-pointer select-none relative ${
+              className={`flex-1 min-w-0 min-h-[48px] flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all active:scale-95 cursor-pointer select-none relative ${
                 isActive
                   ? 'text-emerald-400 font-extrabold'
                   : 'text-slate-400 hover:text-slate-200 font-medium'

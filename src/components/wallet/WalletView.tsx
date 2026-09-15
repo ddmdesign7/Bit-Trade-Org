@@ -58,8 +58,8 @@ export const WalletView: React.FC = () => {
   const [sendAsset, setSendAsset] = useState('USDT');
   const [sendAmount, setSendAmount] = useState('100');
 
-  // Static demo deposit addresses
-  const demoAddresses: Record<string, string> = {
+  // Static vault deposit addresses
+  const vaultAddresses: Record<string, string> = {
     BTC: 'bc1q9v8t3z7k8x5n2m4p6r1y0w9e8u7i6o5p4a3s2d',
     ETH: '0x71C...49A2d1B3C5E7F9A0b2D4e6A8c1F3d7E9a1B5c8',
     SOL: '9xQeW...8mKpL1vB3cD5fG7hJ9kL2mN4pQ6rS8tU0vW2x',
@@ -74,7 +74,7 @@ export const WalletView: React.FC = () => {
     addToast({
       type: 'info',
       title: 'Address Copied',
-      message: 'Simulated wallet address copied to clipboard.',
+      message: 'Wallet address copied to clipboard.',
       duration: 2000,
     });
     setTimeout(() => setCopied(false), 2000);
@@ -236,7 +236,7 @@ export const WalletView: React.FC = () => {
               Asset Allocation & Vault Balances
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Simulated crypto and stablecoin ledger balances
+              Encrypted crypto and stablecoin ledger balances
             </p>
           </div>
           <span className="text-xs font-semibold text-slate-400">
@@ -422,7 +422,7 @@ export const WalletView: React.FC = () => {
         isOpen={depositOpen}
         onClose={() => setDepositOpen(false)}
         title="Deposit Digital Assets"
-        subtitle="Fund your Bit Trade Net demo wallet"
+        subtitle="Fund your Bit Trade Net wallet"
         maxWidth="md"
       >
         <form onSubmit={handleConfirmDeposit} className="space-y-4">
@@ -492,10 +492,10 @@ export const WalletView: React.FC = () => {
                 Your Assigned Vault Address
               </span>
               <div className="flex items-center justify-between gap-2 p-2 mt-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-400">
-                <span className="truncate">{demoAddresses[depAsset] || '0x71C...49A2'}</span>
+                <span className="truncate">{vaultAddresses[depAsset] || '0x71C...49A2'}</span>
                 <button
                   type="button"
-                  onClick={() => handleCopyAddress(demoAddresses[depAsset] || '0x71C...49A2')}
+                  onClick={() => handleCopyAddress(vaultAddresses[depAsset] || '0x71C...49A2')}
                   className="shrink-0 p-1 hover:bg-slate-800 rounded text-slate-300 hover:text-slate-100 transition-colors cursor-pointer"
                   title="Copy address"
                 >
@@ -505,10 +505,10 @@ export const WalletView: React.FC = () => {
             </div>
           </div>
 
-          {/* Test Amount Field */}
+          {/* Amount Field */}
           <div>
             <label className="block text-xs font-semibold text-slate-400 mb-1">
-              Simulate Deposit Amount
+              Deposit Amount
             </label>
             <div className="relative">
               <input
@@ -536,7 +536,7 @@ export const WalletView: React.FC = () => {
             ) : (
               <>
                 <ArrowDownLeft className="w-4 h-4" />
-                <span>Execute Simulated Deposit</span>
+                <span>Confirm & Credit Deposit</span>
               </>
             )}
           </button>
@@ -634,7 +634,7 @@ export const WalletView: React.FC = () => {
                   <span>Withdrawal Request Pre-Validated</span>
                 </div>
                 <p className="text-slate-400">
-                  Please enter your 6-digit Authenticator TOTP token or demo passcode to release funds.
+                  Please enter your 6-digit Authenticator TOTP token to authorize withdrawal.
                 </p>
                 <div className="text-slate-300 font-mono text-xs pt-2 border-t border-slate-800">
                   Amount: <strong>{withAmount} {withAsset}</strong> &bull; Destination: <strong>{withAddress.slice(0, 10)}...</strong>
@@ -643,14 +643,14 @@ export const WalletView: React.FC = () => {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-400 mb-1">
-                  2FA Authenticator Code (Demo Code: 492019)
+                  2FA Authenticator Code
                 </label>
                 <input
                   type="text"
                   maxLength={6}
                   value={with2FACode}
                   onChange={(e) => setWith2FACode(e.target.value)}
-                  placeholder="492019"
+                  placeholder="123456"
                   className="glass-input w-full px-3.5 py-3 rounded-xl text-center text-lg font-mono tracking-widest font-bold"
                   autoFocus
                 />

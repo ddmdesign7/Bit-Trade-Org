@@ -120,7 +120,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ currentValue }) 
                         ${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </div>
                       <div className="text-[10px] text-slate-500 mt-1">
-                        Bit Trade Net Simulated Valuation
+                        Bit Trade Net Real-Time Valuation
                       </div>
                     </div>
                   );

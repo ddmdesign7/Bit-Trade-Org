@@ -183,7 +183,7 @@ export const TradeView: React.FC = () => {
                 <span className="text-xs text-slate-400 font-mono">({selectedAsset.symbol}/USD)</span>
               </div>
               <div className="text-[10px] text-emerald-400 font-semibold">
-                Simulated Liquidity Pool
+                Primary Liquidity Pool
               </div>
             </div>
             <ChevronDown className="w-4 h-4 text-slate-400 ml-1" />
@@ -297,10 +297,10 @@ export const TradeView: React.FC = () => {
           </div>
         </div>
 
-        {/* Demo Disclaimer Pill */}
+        {/* Engine Status Pill */}
         <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/70 border border-emerald-500/30 text-[11px] font-bold text-emerald-400">
           <Zap className="w-3 h-3 text-emerald-400" />
-          <span>SIMULATED MATCHING ENGINE</span>
+          <span>ULTRA-LOW LATENCY ENGINE</span>
         </div>
       </div>
 

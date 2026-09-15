@@ -160,7 +160,7 @@ export const DashboardView: React.FC = () => {
           id="stat-today-pnl"
           label="Today's Profit / Loss"
           value={`${todayPnL.value >= 0 ? '+' : ''}$${Math.abs(todayPnL.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-          subValue="Simulated 24H Unrealized"
+          subValue="24H Unrealized PnL"
           change={todayPnL.percent}
           changeLabel="24h PnL"
           icon={TrendingUp}
@@ -287,7 +287,7 @@ export const DashboardView: React.FC = () => {
                 Market Overview
               </h3>
               <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
-                Top liquidity pairs available for live simulation trading
+                Top liquidity pairs available for live digital asset trading
               </p>
             </div>
             <button

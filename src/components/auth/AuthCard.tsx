@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTrading } from '../../context/TradingContext';
 import { Logo } from '../layout/Logo';
-import { Eye, EyeOff, Lock, Mail, User as UserIcon, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User as UserIcon, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 interface AuthCardProps {
   initialMode?: 'login' | 'register' | 'forgot-password';
@@ -13,12 +13,12 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuc
   const [mode, setMode] = useState<'login' | 'register' | 'forgot-password'>(initialMode);
   
   // Form fields
-  const [email, setEmail] = useState('Berginjoshua1@gmail.com');
-  const [password, setPassword] = useState('Thatguy12@');
-  const [name, setName] = useState('Joshua James Bergin');
-  const [confirmPassword, setConfirmPassword] = useState('Thatguy12@');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
-  const [agreeTerms, setAgreeTerms] = useState(true);
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -104,26 +104,6 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuc
     }
   };
 
-  const handleDemoFill = () => {
-    if (mode === 'login') {
-      setEmail('Berginjoshua1@gmail.com');
-      setPassword('Thatguy12@');
-    } else if (mode === 'register') {
-      setName('Joshua James Bergin');
-      setEmail('Berginjoshua1@gmail.com');
-      setPassword('Thatguy12@');
-      setConfirmPassword('Thatguy12@');
-    } else {
-      setEmail('Berginjoshua1@gmail.com');
-    }
-    addToast({
-      type: 'info',
-      title: 'Credentials Loaded',
-      message: 'Account credentials populated for Berginjoshua1@gmail.com.',
-      duration: 2000,
-    });
-  };
-
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
@@ -162,9 +142,9 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuc
       </svg>
 
       {/* Main Authentication Card */}
-      <div className="relative w-full max-w-[440px] z-10">
+      <div className="relative w-full max-w-[440px] z-10 px-2 sm:px-0">
         <div 
-          className="glass-panel rounded-2xl p-7 sm:p-9 shadow-2xl border border-slate-700/60 relative overflow-hidden"
+          className="glass-panel rounded-2xl p-5 sm:p-8 md:p-9 shadow-2xl border border-slate-700/60 relative overflow-hidden"
           style={{
             boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px rgba(16, 185, 129, 0.08)'
           }}
@@ -208,21 +188,6 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuc
                 </p>
               </>
             )}
-          </div>
-
-          {/* Quick Demo Fill Helper Pill */}
-          <div className="flex items-center justify-between bg-emerald-950/40 border border-emerald-500/20 rounded-lg px-3 py-1.5 mb-5 text-xs text-emerald-300">
-            <div className="flex items-center gap-1.5 font-medium">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span>Simulation Demo Sandbox</span>
-            </div>
-            <button
-              type="button"
-              onClick={handleDemoFill}
-              className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors cursor-pointer"
-            >
-              Fill Demo Data
-            </button>
           </div>
 
           {/* Form */}
@@ -388,7 +353,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuc
                     className="w-4 h-4 mt-0.5 rounded border-slate-700 bg-slate-800/80 text-emerald-500 focus:ring-emerald-500/30 focus:ring-offset-0 cursor-pointer"
                   />
                   <label htmlFor="terms-agree" className="ml-2 block text-xs text-slate-400 leading-tight select-none">
-                    I acknowledge that Bit Trade Net is a simulated demonstration interface and agree to the Terms of Service and Privacy Policy.
+                    I agree to the Terms of Service and Privacy Policy.
                   </label>
                 </div>
               )}
@@ -506,7 +471,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({ initialMode = 'login', onSuc
         {/* Footer info */}
         <div className="mt-5 text-center">
           <p className="text-[11px] text-slate-500 font-medium">
-            Bit Trade Net Institutional Sandbox &bull; AES-256 Encrypted Protocol
+            Bit Trade Net &bull; 256-Bit SSL End-to-End Encryption
           </p>
         </div>
       </div>

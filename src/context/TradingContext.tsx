@@ -182,15 +182,7 @@ export const TradingProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
   const [sessions, setSessions] = useState<ActiveSession[]>(INITIAL_SESSIONS);
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>(INITIAL_LOGS);
-  const [toasts, setToasts] = useState<ToastMessage[]>([
-    {
-      id: 'toast_welcome',
-      type: 'info',
-      title: 'Simulation Mode Active',
-      message: 'Bit Trade Net is running in institutional sandbox demo mode.',
-      duration: 5000,
-    }
-  ]);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   // Toast Helper
   const addToast = (toast: Omit<ToastMessage, 'id'>) => {

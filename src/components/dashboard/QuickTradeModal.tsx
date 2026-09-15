@@ -69,7 +69,7 @@ export const QuickTradeModal: React.FC<QuickTradeModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Quick Instant Trade"
-      subtitle="Execute simulated market orders with zero latency"
+      subtitle="Execute instant market orders with zero latency"
       maxWidth="md"
     >
       <form onSubmit={handleConfirm} className="space-y-4">

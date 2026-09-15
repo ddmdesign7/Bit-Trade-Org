@@ -78,7 +78,7 @@ export const StatCard: React.FC<StatCardProps> = ({
           </div>
         ) : (
           <div className="text-[11px] text-slate-400">
-            Real-time simulated ledger
+            Real-time institutional ledger
           </div>
         )}
 

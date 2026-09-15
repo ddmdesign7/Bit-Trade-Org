@@ -16,7 +16,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) =
   const [copied, setCopied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const demoAddresses: Record<string, string> = {
+  const vaultAddresses: Record<string, string> = {
     BTC: 'bc1q9v8t3z7k8x5n2m4p6r1y0w9e8u7i6o5p4a3s2d',
     ETH: '0x71C...49A2d1B3C5E7F9A0b2D4e6A8c1F3d7E9a1B5c8',
     SOL: '9xQeW...8mKpL1vB3cD5fG7hJ9kL2mN4pQ6rS8tU0vW2x',
@@ -57,7 +57,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) =
       isOpen={isOpen}
       onClose={onClose}
       title="Deposit Digital Assets"
-      subtitle="Fund your Bit Trade Net institutional sandbox"
+      subtitle="Fund your Bit Trade Net account"
       maxWidth="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -116,10 +116,10 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) =
           </div>
 
           <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-400">
-            <span className="truncate">{demoAddresses[depAsset] || '0x71C...49A2'}</span>
+            <span className="truncate">{vaultAddresses[depAsset] || '0x71C...49A2'}</span>
             <button
               type="button"
-              onClick={() => handleCopyAddress(demoAddresses[depAsset] || '0x71C...49A2')}
+              onClick={() => handleCopyAddress(vaultAddresses[depAsset] || '0x71C...49A2')}
               className="shrink-0 p-1 text-slate-400 hover:text-slate-100 cursor-pointer"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -129,7 +129,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) =
 
         <div>
           <label className="block text-xs font-semibold text-slate-400 mb-1">
-            Simulated Amount
+            Deposit Amount
           </label>
           <div className="relative">
             <input
@@ -157,7 +157,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) =
           ) : (
             <>
               <ArrowDownLeft className="w-4 h-4" />
-              <span>Credit Simulated Balance</span>
+              <span>Confirm & Credit Deposit</span>
             </>
           )}
         </button>

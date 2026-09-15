@@ -81,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDeposit }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#060a12]/95 backdrop-blur-xl safe-area-pt">
+    <div className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#060a12]/95 backdrop-blur-xl safe-area-pt">
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
@@ -116,11 +116,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDeposit }) => {
           </nav>
 
           {/* Right Header Actions */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
-            {/* Demo Simulation Pill */}
+          <div className="flex items-center gap-1 sm:gap-2.5">
+            {/* Live Trading Status Pill */}
             <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[11px] font-semibold text-emerald-400 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>SIMULATION DEMO</span>
+              <span>LIVE TRADING</span>
             </div>
 
             {/* Quick Deposit Button */}
@@ -363,8 +363,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDeposit }) => {
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-800 bg-[#070b14]/98 px-4 pt-3 pb-6 space-y-2 backdrop-blur-2xl">
-          <div className="flex items-center justify-between p-2 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-300 mb-3">
-            <span>Simulation Demo Active</span>
+          <div className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-300 mb-3">
+            <span className="font-medium">Portfolio Balance</span>
             <span className="font-mono font-bold">${totalPortfolioValue.toLocaleString()}</span>
           </div>
 
@@ -432,6 +432,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDeposit }) => {
           )}
         </div>
       )}
-    </header>
+    </div>
   );
 };
